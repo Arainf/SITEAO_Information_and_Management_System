@@ -94,4 +94,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class, 'created_by');
     }
+
+    public function userPositions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserPosition::class);
+    }
 }

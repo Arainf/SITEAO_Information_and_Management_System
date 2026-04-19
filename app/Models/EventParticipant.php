@@ -12,6 +12,7 @@ class EventParticipant extends Pivot
     public $incrementing = false;
     public $timestamps   = false;
 
+
     const STATUS_PENDING_PROOF = 'pending_proof';
     const STATUS_SUBMITTED     = 'submitted';
     const STATUS_APPROVED      = 'approved';
@@ -25,14 +26,16 @@ class EventParticipant extends Pivot
         'proof_path',
         'remarks',
         'submitted_at',
+        'cert_released_at',
         'joined_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'submitted_at' => 'datetime',
-            'joined_at'    => 'datetime',
+            'submitted_at'     => 'datetime',
+            'cert_released_at' => 'datetime',
+            'joined_at'        => 'datetime',
         ];
     }
 
@@ -46,6 +49,7 @@ class EventParticipant extends Pivot
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function hasCert(): bool        { return $this->cert_released_at !== null; }
     public function isPendingProof(): bool { return $this->status === self::STATUS_PENDING_PROOF; }
     public function isSubmitted(): bool    { return $this->status === self::STATUS_SUBMITTED; }
     public function isApproved(): bool     { return $this->status === self::STATUS_APPROVED; }

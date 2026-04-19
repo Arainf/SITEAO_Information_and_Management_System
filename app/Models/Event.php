@@ -17,11 +17,14 @@ class Event extends Model
     const STATUS_CLOSED = 'closed';
 
     protected $fillable = [
+        'term_id',
         'title',
         'description',
         'event_date',
         'location',
         'status',
+        'cert_template',
+        'fb_post_url',
         'created_by',
     ];
 
@@ -30,6 +33,11 @@ class Event extends Model
         return [
             'event_date' => 'datetime',
         ];
+    }
+
+    public function term(): BelongsTo
+    {
+        return $this->belongsTo(Term::class);
     }
 
     public function creator(): BelongsTo

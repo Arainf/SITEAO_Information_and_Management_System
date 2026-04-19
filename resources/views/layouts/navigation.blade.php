@@ -25,11 +25,43 @@
                         Events
                     </a>
 
+                    @if(auth()->user()->hasRole(['admin', 'moderator', 'officer']))
+                        <a href="{{ route('validation.index') }}"
+                           class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                           style="letter-spacing: 0.08px; color: {{ request()->routeIs('validation.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('validation.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
+                            Validation
+                        </a>
+                    @endif
+
+                    <a href="{{ route('administration.index') }}"
+                       class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                       style="letter-spacing: 0.08px; color: {{ request()->routeIs('administration.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('administration.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
+                        Administration
+                    </a>
+
+                    @if(auth()->user()->hasRole(['admin', 'moderator']))
+                        <a href="{{ route('admin.assignments.create') }}"
+                           class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                           style="letter-spacing: 0.08px; color: {{ request()->routeIs('admin.assignments.create') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.assignments.create') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
+                            Assign
+                        </a>
+                    @endif
+
                     @if(auth()->user()->isAdmin())
                         <a href="{{ route('admin.users.index') }}"
                            class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
-                           style="letter-spacing: 0.08px; color: {{ request()->routeIs('admin.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
+                           style="letter-spacing: 0.08px; color: {{ request()->routeIs('admin.users.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.users.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
                             Users
+                        </a>
+                        <a href="{{ route('admin.terms.index') }}"
+                           class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                           style="letter-spacing: 0.08px; color: {{ request()->routeIs('admin.terms.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.terms.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
+                            Terms
+                        </a>
+                        <a href="{{ route('admin.committees.index') }}"
+                           class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                           style="letter-spacing: 0.08px; color: {{ request()->routeIs('admin.committees.*') || request()->routeIs('admin.positions.*') || request()->routeIs('admin.assignments.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.committees.*') || request()->routeIs('admin.positions.*') || request()->routeIs('admin.assignments.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }};">
+                            Org
                         </a>
                     @endif
                 </div>
@@ -117,11 +149,43 @@
                 Events
             </a>
 
+            @if(auth()->user()->hasRole(['admin', 'moderator', 'officer']))
+                <a href="{{ route('validation.index') }}"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                   style="color: {{ request()->routeIs('validation.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('validation.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
+                    Validation
+                </a>
+            @endif
+
+            <a href="{{ route('administration.index') }}"
+               class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+               style="color: {{ request()->routeIs('administration.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('administration.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
+                Administration
+            </a>
+
+            @if(auth()->user()->hasRole(['admin', 'moderator']))
+                <a href="{{ route('admin.assignments.create') }}"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                   style="color: {{ request()->routeIs('admin.assignments.create') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.assignments.create') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
+                    Assign Position
+                </a>
+            @endif
+
             @if(auth()->user()->isAdmin())
                 <a href="{{ route('admin.users.index') }}"
                    class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
-                   style="color: {{ request()->routeIs('admin.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
+                   style="color: {{ request()->routeIs('admin.users.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.users.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
                     Users
+                </a>
+                <a href="{{ route('admin.terms.index') }}"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                   style="color: {{ request()->routeIs('admin.terms.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.terms.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
+                    Terms
+                </a>
+                <a href="{{ route('admin.committees.index') }}"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 no-underline"
+                   style="color: {{ request()->routeIs('admin.committees.*') || request()->routeIs('admin.positions.*') || request()->routeIs('admin.assignments.*') ? '#1b61c9' : 'rgba(4,14,32,0.69)' }}; background: {{ request()->routeIs('admin.committees.*') || request()->routeIs('admin.positions.*') || request()->routeIs('admin.assignments.*') ? 'rgba(27,97,201,0.07)' : 'transparent' }}; letter-spacing: 0.08px;">
+                    Org
                 </a>
             @endif
         </div>

@@ -18,5 +18,9 @@
             @include('profile.partials.delete-user-form')
         </div>
 
+        <div class="sims-card overflow-hidden">
+            @include('profile.partials.my-certificates')
+        </div>
+
     </div>
 </x-app-layout>

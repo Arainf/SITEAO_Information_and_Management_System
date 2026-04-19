@@ -14,7 +14,7 @@
     <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
 
         <!-- Quick actions -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <a href="{{ route('admin.users.index') }}"
                class="sims-card p-6 flex flex-col gap-3 no-underline group transition-all duration-200"
                style="hover: box-shadow: var(--theme_shadow-card);"
@@ -56,17 +56,53 @@
                 </div>
             </a>
 
-            <div class="sims-card p-6 flex flex-col gap-3 opacity-50 cursor-not-allowed">
+            <a href="{{ route('admin.terms.index') }}"
+               class="sims-card p-6 flex flex-col gap-3 no-underline group transition-all duration-200"
+               onmouseover="this.style.boxShadow='rgba(0,0,0,0.32) 0px 0px 1px, rgba(0,0,0,0.12) 0px 2px 6px, rgba(45,127,249,0.36) 0px 2px 8px'"
+               onmouseout="this.style.boxShadow='rgba(0,0,0,0.32) 0px 0px 1px, rgba(0,0,0,0.08) 0px 0px 2px, rgba(45,127,249,0.28) 0px 1px 3px, rgba(0,0,0,0.06) 0px 0px 0px 0.5px inset'">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
-                     style="background: rgba(4,14,32,0.05);">
-                    🏆
+                     style="background: rgba(27,97,201,0.08);">
+                    🗂️
                 </div>
                 <div>
-                    <p class="font-semibold text-sm" style="color: #181d26; letter-spacing: 0.08px;">Achievements</p>
-                    <p class="text-xs mt-0.5" style="color: rgba(4,14,32,0.69); letter-spacing: 0.07px;">View verified achievements</p>
+                    <p class="font-semibold text-sm" style="color: #181d26; letter-spacing: 0.08px;">Terms</p>
+                    <p class="text-xs mt-0.5" style="color: rgba(4,14,32,0.69); letter-spacing: 0.07px;">Manage academic terms and officers</p>
                 </div>
-                <span class="text-xs font-medium mt-auto" style="color: rgba(4,14,32,0.35); letter-spacing: 0.07px;">Coming soon</span>
-            </div>
+                <div class="flex items-center gap-1 text-xs font-medium mt-auto" style="color: #1b61c9; letter-spacing: 0.07px;">
+                    Open
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.committees.index') }}"
+               class="sims-card p-6 flex flex-col gap-3 no-underline group transition-all duration-200"
+               onmouseover="this.style.boxShadow='rgba(0,0,0,0.32) 0px 0px 1px, rgba(0,0,0,0.12) 0px 2px 6px, rgba(45,127,249,0.36) 0px 2px 8px'"
+               onmouseout="this.style.boxShadow='rgba(0,0,0,0.32) 0px 0px 1px, rgba(0,0,0,0.08) 0px 0px 2px, rgba(45,127,249,0.28) 0px 1px 3px, rgba(0,0,0,0.06) 0px 0px 0px 0.5px inset'">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
+                     style="background: rgba(27,97,201,0.08);">
+                    🏛️
+                </div>
+                <div>
+                    <p class="font-semibold text-sm" style="color: #181d26; letter-spacing: 0.08px;">Org Structure</p>
+                    <p class="text-xs mt-0.5" style="color: rgba(4,14,32,0.69); letter-spacing: 0.07px;">Committees, positions, assignments</p>
+                </div>
+                @php $pendingCount = \App\Models\UserPosition::where('status', 'pending')->count(); @endphp
+                <div class="flex items-center justify-between mt-auto">
+                    <div class="flex items-center gap-1 text-xs font-medium" style="color: #1b61c9; letter-spacing: 0.07px;">
+                        Open
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    @if($pendingCount > 0)
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background: #fde68a; color: #92400e;">
+                            {{ $pendingCount }} pending
+                        </span>
+                    @endif
+                </div>
+            </a>
         </div>
 
         <!-- System overview -->

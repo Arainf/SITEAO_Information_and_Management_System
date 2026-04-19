@@ -65,6 +65,19 @@
             </div>
         </div>
 
+        <!-- Facebook Post Embed -->
+        @if($event->fb_post_url)
+            <div class="sims-card p-6">
+                <h2 class="text-sm font-semibold mb-4" style="color: #181d26; letter-spacing: 0.08px;">Official Facebook Post</h2>
+                <div id="fb-root"></div>
+                <div class="fb-post"
+                     data-href="{{ $event->fb_post_url }}"
+                     data-width="500"
+                     data-show-text="true">
+                </div>
+            </div>
+        @endif
+
         <!-- Participation Actions (non-admin/moderator) -->
         @if(! auth()->user()->hasRole(['admin', 'moderator']))
             <div class="sims-card p-6">
@@ -122,6 +135,14 @@
                         <p class="text-sm" style="color: rgba(4,14,32,0.69);">Your proof has been submitted and is awaiting review.</p>
                     @elseif($participation->isApproved())
                         <p class="text-sm" style="color: #2a9d5c;">Your participation has been approved.</p>
+                        @if($participation->hasCert())
+                            <a href="{{ route('events.certificate', $event) }}"
+                               class="btn-primary mt-3 inline-flex text-sm">
+                                Download Certificate
+                            </a>
+                        @elseif($event->cert_template)
+                            <p class="text-xs mt-2" style="color: rgba(4,14,32,0.55);">Your certificate will be available once released by a moderator.</p>
+                        @endif
                     @endif
                 @endif
             </div>
@@ -153,6 +174,7 @@
                                 <th>Status</th>
                                 <th>Joined</th>
                                 <th>Proof</th>
+                                <th>Certificate</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,13 +203,66 @@
                                             <span class="text-xs" style="color: rgba(4,14,32,0.35);">None</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if($participant->pivot->cert_released_at)
+                                            <span class="badge badge-active">Released</span>
+                                        @elseif($participant->pivot->isApproved())
+                                            <span class="badge badge-pending">Pending release</span>
+                                        @else
+                                            <span class="text-xs" style="color: rgba(4,14,32,0.35);">—</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
+                    {{-- Certificate release form --}}
+                    @if($event->cert_template)
+                        @php
+                            $releasable = $event->participants->filter(
+                                fn($p) => $p->pivot->isApproved() && ! $p->pivot->cert_released_at
+                            );
+                        @endphp
+                        @if($releasable->isNotEmpty())
+                            <form method="POST" action="{{ route('events.certificates.release', $event) }}">
+                                @csrf
+                                <div class="px-6 py-5 border-t" style="border-color: #e0e2e6;">
+                                    <p class="text-sm font-semibold mb-1" style="color: #181d26;">Release Certificates</p>
+                                    <p class="text-xs mb-4" style="color: rgba(4,14,32,0.69);">Select approved participants to make their certificate available for download:</p>
+                                    <div class="space-y-2 mb-4">
+                                        @foreach($releasable as $participant)
+                                            <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+                                                <input type="checkbox" name="user_ids[]" value="{{ $participant->id }}"
+                                                       class="rounded"
+                                                       style="accent-color: #1b61c9; width: 15px; height: 15px;">
+                                                <span style="color: #181d26;">{{ $participant->name }}</span>
+                                                @if($participant->committee)
+                                                    <span class="text-xs" style="color: rgba(4,14,32,0.55);">· {{ $participant->committee }}</span>
+                                                @endif
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    <button type="submit" class="btn-primary text-sm">Release Selected</button>
+                                </div>
+                            </form>
+                        @elseif($event->participants->where('pivot.status', 'approved')->isNotEmpty())
+                            <div class="px-6 py-4 border-t" style="border-color: #e0e2e6;">
+                                <p class="text-sm" style="color: rgba(4,14,32,0.55);">All approved participants have already received their certificates.</p>
+                            </div>
+                        @endif
+                    @endif
                 @endif
             </div>
         @endif
 
     </div>
+
+    @if($event->fb_post_url)
+        @push('scripts')
+        <script async defer crossorigin="anonymous"
+            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0">
+        </script>
+        @endpush
+    @endif
 </x-app-layout>

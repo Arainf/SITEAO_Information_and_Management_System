@@ -48,13 +48,15 @@ class EventParticipantController extends Controller
         $ext  = $file->getClientOriginalExtension();
         $path = $file->storeAs("proofs/{$event->id}/{$user->id}", "proof.{$ext}", 'public');
 
-        $participation->update([
-            'proof_type'   => $request->input('proof_type'),
-            'proof_path'   => $path,
-            'status'       => EventParticipant::STATUS_SUBMITTED,
-            'submitted_at' => now(),
-            'remarks'      => null,
-        ]);
+        EventParticipant::where('event_id', $event->id)
+            ->where('user_id', $user->id)
+            ->update([
+                'proof_type'   => $request->input('proof_type'),
+                'proof_path'   => $path,
+                'status'       => EventParticipant::STATUS_SUBMITTED,
+                'submitted_at' => now(),
+                'remarks'      => null,
+            ]);
 
         return back()->with('success', 'Proof submitted successfully.');
     }

@@ -18,7 +18,7 @@
     </x-slot>
 
     <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
-        <form method="POST" action="{{ route('events.update', $event) }}" x-data="tagSearch({{ json_encode($taggedUsers) }})" @submit="prepareTaggedUsers">
+        <form method="POST" action="{{ route('events.update', $event) }}" enctype="multipart/form-data" x-data="tagSearch({{ json_encode($taggedUsers) }})" @submit="prepareTaggedUsers">
             @csrf
             @method('PUT')
 
@@ -57,6 +57,20 @@
                     </div>
                 </div>
 
+                <!-- Term -->
+                <div>
+                    <x-input-label for="term_id" :value="__('Term')" />
+                    <select id="term_id" name="term_id" class="sims-input mt-1 block w-full">
+                        <option value="">— No term —</option>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}" @selected(old('term_id', $event->term_id) == $term->id)>
+                                {{ $term->name }}{{ $term->is_active ? ' (Active)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <x-input-error :messages="$errors->get('term_id')" class="mt-1" />
+                </div>
+
                 <!-- Status -->
                 <div>
                     <x-input-label for="status" :value="__('Status')" />
@@ -66,6 +80,38 @@
                         @endforeach
                     </select>
                     <x-input-error :messages="$errors->get('status')" class="mt-1" />
+                </div>
+
+                <!-- Certificate Template -->
+                <div>
+                    <x-input-label for="cert_template" :value="__('Certificate Template (PNG)')" />
+                    <p class="text-xs mt-0.5 mb-2" style="color: rgba(4,14,32,0.55);">
+                        Upload a new PNG to replace the current template.
+                    </p>
+                    @if($event->cert_template)
+                        <div class="mb-2 flex items-center gap-3">
+                            <img src="{{ Storage::url($event->cert_template) }}"
+                                 class="h-20 rounded-xl border object-contain"
+                                 style="border-color: #e0e2e6;">
+                            <span class="text-xs" style="color: rgba(4,14,32,0.55);">Current template</span>
+                        </div>
+                    @endif
+                    <input id="cert_template" name="cert_template" type="file" accept="image/png"
+                           class="mt-1 block w-full text-sm rounded-xl border px-3 py-2"
+                           style="color: #181d26; border-color: #e0e2e6; background: #fff;">
+                    <x-input-error :messages="$errors->get('cert_template')" class="mt-1" />
+                </div>
+
+                <!-- Facebook Post URL -->
+                <div>
+                    <x-input-label for="fb_post_url" :value="__('Facebook Post URL (optional)')" />
+                    <p class="text-xs mt-0.5 mb-1" style="color: rgba(4,14,32,0.55);">
+                        Paste the URL of the official Facebook post. It will be embedded on the event page.
+                    </p>
+                    <x-text-input id="fb_post_url" name="fb_post_url" type="url" class="mt-1 block w-full"
+                        :value="old('fb_post_url', $event->fb_post_url)"
+                        placeholder="https://www.facebook.com/…/posts/…" />
+                    <x-input-error :messages="$errors->get('fb_post_url')" class="mt-1" />
                 </div>
 
                 <!-- Tag Users -->
